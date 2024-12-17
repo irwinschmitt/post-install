@@ -63,6 +63,9 @@ install_apps() {
     echo "Google Chrome, Visual Studio Code, Bitwarden, Slack, and Postman have been installed successfully."
     sudo apt-get install -y chrome-gnome-shell
     sudo apt-get install -f -y
+
+    # Install Joplin
+    wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 }
 
 # Install drivers
@@ -109,8 +112,14 @@ install_zsh() {
 # Create directories and add to bookmarks
 setup_directories() {
     mkdir -p ~/Work ~/Project
-    echo "file://$HOME/Work Work" >>~/.config/gtk-3.0/bookmarks
-    echo "file://$HOME/Project Project" >>~/.config/gtk-3.0/bookmarks
+
+    bookmark_file="$HOME/.config/gtk-3.0/bookmarks"
+    if ! grep -q "file://$HOME/Work Work" "$bookmark_file"; then
+        echo "file://$HOME/Work Work" >>"$bookmark_file"
+    fi
+    if ! grep -q "file://$HOME/Project Project" "$bookmark_file"; then
+        echo "file://$HOME/Project Project" >>"$bookmark_file"
+    fi
 }
 
 # Install NVM (Node Version Manager)
